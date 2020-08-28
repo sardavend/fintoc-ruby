@@ -1,7 +1,7 @@
 module Fintoc
   class Institution
-    def initialize(id_:, name:, country:, **)
-      @id_ = id_
+    def initialize(id:, name:, country:, **)
+      @id = id
       @name = name
       @country = country
     end
