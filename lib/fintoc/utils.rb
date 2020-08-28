@@ -5,7 +5,7 @@ module Fintoc
   module Utils
     extend self
 
-    FIELDSUBS = [%w[id id_], %w[type type_]].freeze
+    # FIELDSUBS = [%w[id id_], %w[type type_]].freeze
 
     # Get a flat Array out of a list of lists of Iterables(Enumerators)
     #

@@ -1,7 +1,6 @@
 require 'fintoc/errors'
 
 RSpec.describe Fintoc::Errors do
-  context 'FintocError'
   let(:error) { { 
     message: 'Missing required param: link_token',
     doc_url: 'https://fintoc.com/docs#invalid-request-error'
