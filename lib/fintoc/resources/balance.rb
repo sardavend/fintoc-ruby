@@ -11,7 +11,7 @@ module Fintoc
     end
 
     def to_s
-      "#{@available} (#{@current}"
+      "#{@available} (#{@current})"
     end
 
     def inspect
