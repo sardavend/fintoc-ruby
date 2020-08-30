@@ -10,7 +10,7 @@ module Fintoc
     # Get a flat Array out of a list of lists of Iterables(Enumerators)
     #
     def flatten(sequences)
-      Enumerator::Chain.new(sequences).to_a
+      Enumerator::Chain.new(*sequences).to_a
     end
 
     # If the key exists, you will get that key-value pair.
@@ -38,6 +38,8 @@ module Fintoc
       "#{quantifier} #{amount == 1 ? noun : noun + suffix}"
     end
 
+    # this method is unnecesary here, because in ruby id and type are not reserved keywords
+    #
     def rename_keys(dist, keys)
       if dist.instance_of? Array
         dist.each { |item| rename_keys(item, keys) }
