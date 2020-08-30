@@ -6,7 +6,7 @@ require 'fintoc/resources/balance'
 module Fintoc
   class Account
     include Utils
-    attr_reader :type
+    attr_reader :type, :name, :holder_name, :currency
     def initialize(
       id:,
       name:,
@@ -34,13 +34,13 @@ module Fintoc
       @client = client
     end
 
-    def upate_balance
-      data = account.get('balance')
-      @balance = Fintoc::Balance.new(**data)
+    def update_balance
+      @balance = Fintoc::Balance.new(**account[:balance])
     end
 
     def movements(**params)
-      get_movements(**params).lazy.each{ |movement| Fintoc::Movement.new(**movement) }
+      @movements = get_movements(**params).lazy.map { |movement| Fintoc::Movement.new(**movement) }
+      @movements
     end
 
     def update_movements(**params)
@@ -53,9 +53,9 @@ module Fintoc
 
       return unless @movements.any?
 
-      movements = @movements.slice(0, rows)
+      movements = @movements.to_a.slice(0, rows)
                             .map.with_index do |mov, index|
-                              [index + 1. mov.currency, mov.description, mov.locale_date]
+                              [index + 1, mov.amount, mov.currency, mov.description, mov.locale_date]
                             end
       headers = ['#', 'Amount', 'Currency', 'Description', 'Date']
       puts
@@ -69,12 +69,13 @@ module Fintoc
     private
 
     def account
-      @client.get("accounts/#{@id_}")
+      @client.get.call("accounts/#{@id}")
     end
 
     def get_movements(**params)
-      first = @client.get("accounts/#{@id_}/movements", params=params)
-      params.nil? ? first : first + Utils.flatten(@client.fetch_next)
+      first = @client.get.call("accounts/#{@id}/movements", **params)
+      params.empty? ? first : first + Utils.flatten(@client.fetch_next)
+
     end
   end
 end
