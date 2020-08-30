@@ -1,6 +1,7 @@
-require "fintoc/version"
+# frozen_string_literal: true
+
+require 'fintoc/version'
 
 module Fintoc
-  # class Error < StandardError; end
-  # Your code goes here...
+
 end
