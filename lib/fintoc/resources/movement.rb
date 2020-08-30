@@ -3,6 +3,7 @@ require 'fintoc/resources/transfer_account'
 
 module Fintoc
   class Movement
+    attr_reader :amount, :currency, :description
     def initialize(
       id:,
       amount:,
