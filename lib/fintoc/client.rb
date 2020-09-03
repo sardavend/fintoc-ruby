@@ -32,7 +32,7 @@ module Fintoc
     def request(method)
       proc do |resource, **kwargs|
         parameters = params(method, **kwargs)
-        response = make_request method, resource, parameters
+        response = make_request(method, resource, parameters)
         content = JSON.parse(response.body, symbolize_names: true)
         raise_custom_error(content[:error]) if response.status.client_error? || response.status.server_error?
         @link_headers = response.headers.get('link')
