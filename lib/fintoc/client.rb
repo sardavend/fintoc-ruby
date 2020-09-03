@@ -33,16 +33,10 @@ module Fintoc
 
     def request(method)
       proc do |resource, **kwargs|
-        parameters = method == 'get' ?  { params: { **@default_params, **kwargs } } : { json: { **@default_params, **kwargs } }
-
+        parameters = params(method, **kwargs)
         response = make_request method, resource, parameters
         content = JSON.parse(response.body, symbolize_names: true)
-        if response.status.client_error? || response.status.server_error?
-          msg = content[:error][:message]
-          doc_url = content[:error][:doc_url]
-          code = content[:error][:code]
-          raise error_class(code).new(msg, doc_url)
-        end
+        raise_custom_error(content[:error]) if response.status.client_error? || response.status.server_error?
         @link_headers = response.headers.get('link')
         content
       end
@@ -58,6 +52,18 @@ module Fintoc
       end
     end
 
+    def params(method, **kwargs)
+      if method == 'get'
+        { params: { **@default_params, **kwargs } }
+      else
+        { json: { **@default_params, **kwargs } }
+      end
+    end
+
+    def raise_custom_error(error)
+      raise error_class(error[:code]).new(error[:message], error[:doc_url])
+    end
+
     def error_class(snake_code)
       pascal_klass_name = Utils.snake_to_pascal snake_code
       # this conditional klass_name is to handle InternalServerError custom error class
@@ -66,7 +72,7 @@ module Fintoc
       Module.const_get("Fintoc::Errors::#{klass}")
     end
 
-    # This attribute getter Parse the link headers using some regex 24K magic in the air... 
+    # This attribute getter Parse the link headers using some regex 24K magic in the air...
     # Ex.
     # <https://api.fintoc.com/v1/links?page=1>; rel="first", <https://api.fintoc.com/v1/links?page=1>; rel="last"
     # this helps to handle pagination see: https://fintoc.com/docs#paginacion 
@@ -91,12 +97,12 @@ module Fintoc
     end
 
     def link(link_token)
-      data = {**get_link(link_token), "link_token": link_token}
+      data = { **get_link(link_token), "link_token": link_token }
       build_link(data)
     end
 
     def links
-      get_links.each{ |data| build_link(data) }
+      get_links.each { |data| build_link(data) }
     end
 
     def create_link(username, password, holder_type, institution_id)
