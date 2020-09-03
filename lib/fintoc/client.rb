@@ -23,10 +23,6 @@ module Fintoc
       request('get')
     end
 
-    def post
-      request('post')
-    end
-
     def delete
       request('delete')
     end
@@ -65,7 +61,7 @@ module Fintoc
     end
 
     def error_class(snake_code)
-      pascal_klass_name = Utils.snake_to_pascal snake_code
+      pascal_klass_name = Utils.snake_to_pascal(snake_code)
       # this conditional klass_name is to handle InternalServerError custom error class
       # without this the error class name would be like InternalServerErrorError (^-^)
       klass = pascal_klass_name.end_with?('Error') ? pascal_klass_name : pascal_klass_name + 'Error'
@@ -105,19 +101,8 @@ module Fintoc
       get_links.each { |data| build_link(data) }
     end
 
-    def create_link(username, password, holder_type, institution_id)
-      credentials = {
-        username: username,
-        password: password,
-        holder_type: holder_type,
-        institution_id: institution_id
-      }
-      data = post_link(credentials)
-      build_link(data)
-    end
-
     def delete_link(link_id)
-      delete("links/#{link_id}")
+      delete.call("links/#{link_id}")
     end
 
     def account(link_token, account_id)
@@ -138,8 +123,7 @@ module Fintoc
     end
 
     def parse_headers(dict, link)
-      link = link.strip
-      matches = link.match(@pattern)
+      matches = link.strip.match(@pattern)
       dict[matches[:rel]] = matches[:url]
       dict
     end
@@ -150,10 +134,6 @@ module Fintoc
 
     def get_links
       get.call('links')
-    end
-
-    def post_link(credentials)
-      post.call('links', credentials)
     end
 
     def build_link(data)
