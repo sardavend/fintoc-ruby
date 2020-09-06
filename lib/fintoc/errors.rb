@@ -2,11 +2,8 @@ require 'fintoc/constants'
 
 module Fintoc
   module Errors
-    # Fintocs custom errors
     class FintocError < StandardError
       def initialize(message, doc_url = Fintoc::Constants::GENERAL_DOC_URL)
-        # @message = error[:message]
-        # @doc_url = error[:doc_url] or Fintoc::Constants::GENERAL_DOC_URL
         @message = message
         @doc_url = doc_url
       end
@@ -16,7 +13,7 @@ module Fintoc
       end
 
       def to_s
-        "\n#{@message}\n Please check the docs at: #{@doc_url}"
+        message
       end
     end
     class InvalidRequestError < FintocError; end
