@@ -18,7 +18,7 @@ module Fintoc
     end
 
     def inspect
-      "<Balance #{@available} (#{@current}>"
+      "<Balance #{@available} (#{@current})>"
     end
   end
 end
