@@ -43,7 +43,7 @@ module Fintoc
     def make_request(method, resource, parameters)
       # this is to handle url returned in the link headers
       # I'm sure there is a better and more clever way to solve this
-      if resource.include? '/v1/'
+      if resource.start_with? 'https'
         client.send(method, resource)
       else
         client.send(method, "#{Fintoc::Constants::SCHEME}#{Fintoc::Constants::BASE_URL}#{resource}", parameters)
@@ -66,7 +66,7 @@ module Fintoc
       pascal_klass_name = Utils.snake_to_pascal(snake_code)
       # this conditional klass_name is to handle InternalServerError custom error class
       # without this the error class name would be like InternalServerErrorError (^-^)
-      klass = pascal_klass_name.end_with?('Error') ? pascal_klass_name : pascal_klass_name + 'Error'
+      klass = pascal_klass_name.end_with?('Error') ? pascal_klass_name : "#{pascal_klass_name}Error"
       Module.const_get("Fintoc::Errors::#{klass}")
     end
 
