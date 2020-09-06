@@ -40,50 +40,6 @@ module Fintoc
       end
     end
 
-    def make_request(method, resource, parameters)
-      # this is to handle url returned in the link headers
-      # I'm sure there is a better and more clever way to solve this
-      if resource.start_with? 'https'
-        client.send(method, resource)
-      else
-        client.send(method, "#{Fintoc::Constants::SCHEME}#{Fintoc::Constants::BASE_URL}#{resource}", parameters)
-      end
-    end
-
-    def params(method, **kwargs)
-      if method == 'get'
-        { params: { **@default_params, **kwargs } }
-      else
-        { json: { **@default_params, **kwargs } }
-      end
-    end
-
-    def raise_custom_error(error)
-      raise error_class(error[:code]).new(error[:message], error[:doc_url])
-    end
-
-    def error_class(snake_code)
-      pascal_klass_name = Utils.snake_to_pascal(snake_code)
-      # this conditional klass_name is to handle InternalServerError custom error class
-      # without this the error class name would be like InternalServerErrorError (^-^)
-      klass = pascal_klass_name.end_with?('Error') ? pascal_klass_name : "#{pascal_klass_name}Error"
-      Module.const_get("Fintoc::Errors::#{klass}")
-    end
-
-    # This attribute getter Parse the link headers using some regex 24K magic in the air...
-    # Ex.
-    # <https://api.fintoc.com/v1/links?page=1>; rel="first", <https://api.fintoc.com/v1/links?page=1>; rel="last"
-    # this helps to handle pagination see: https://fintoc.com/docs#paginacion 
-    # return a hash like { first:"https://api.fintoc.com/v1/links?page=1" }
-    #
-    # @param link_headers [String]
-    # @return [Hash]
-    def link_headers
-      return if @link_headers.nil?
-
-      @link_headers[0].split(',').reduce({}) { |dict, link| parse_headers(dict, link) }
-    end
-
     def fetch_next
       next_ = link_headers['next']
       Enumerator.new do |yielder|
@@ -142,6 +98,50 @@ module Fintoc
       param = Utils.pick(data, 'link_token')
       @default_params.update(param)
       Link.new(**data, client: self)
+    end
+
+    def make_request(method, resource, parameters)
+      # this is to handle url returned in the link headers
+      # I'm sure there is a better and more clever way to solve this
+      if resource.start_with? 'https'
+        client.send(method, resource)
+      else
+        client.send(method, "#{Fintoc::Constants::SCHEME}#{Fintoc::Constants::BASE_URL}#{resource}", parameters)
+      end
+    end
+
+    def params(method, **kwargs)
+      if method == 'get'
+        { params: { **@default_params, **kwargs } }
+      else
+        { json: { **@default_params, **kwargs } }
+      end
+    end
+
+    def raise_custom_error(error)
+      raise error_class(error[:code]).new(error[:message], error[:doc_url])
+    end
+
+    def error_class(snake_code)
+      pascal_klass_name = Utils.snake_to_pascal(snake_code)
+      # this conditional klass_name is to handle InternalServerError custom error class
+      # without this the error class name would be like InternalServerErrorError (^-^)
+      klass = pascal_klass_name.end_with?('Error') ? pascal_klass_name : "#{pascal_klass_name}Error"
+      Module.const_get("Fintoc::Errors::#{klass}")
+    end
+
+    # This attribute getter Parse the link headers using some regex 24K magic in the air...
+    # Ex.
+    # <https://api.fintoc.com/v1/links?page=1>; rel="first", <https://api.fintoc.com/v1/links?page=1>; rel="last"
+    # this helps to handle pagination see: https://fintoc.com/docs#paginacion 
+    # return a hash like { first:"https://api.fintoc.com/v1/links?page=1" }
+    #
+    # @param link_headers [String]
+    # @return [Hash]
+    def link_headers
+      return if @link_headers.nil?
+
+      @link_headers[0].split(',').reduce({}) { |dict, link| parse_headers(dict, link) }
     end
   end
 end
