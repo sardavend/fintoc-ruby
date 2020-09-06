@@ -23,9 +23,13 @@ RSpec.describe Fintoc::Movement do
         }
       },
       "comment": 'Pago factura 198'
-  }
+    }
   end
-  let(:movement) { Fintoc::Movement.new(**data)}
+  let(:movement) { Fintoc::Movement.new(**data) }
+
+  let(:dup_movements) do
+    (0..1).map { |_| Fintoc::Movement.new(**data) }
+  end
   it 'create an instance of Movement' do
     expect(movement).to be_an_instance_of(Fintoc::Movement)
   end
@@ -33,5 +37,8 @@ RSpec.describe Fintoc::Movement do
     it 'returns the post_date formatted as locale' do
       expect(movement.locale_date).to eq('04/17/20')
     end
+  end
+  it 'return uniq movements using the hash method implemented in Movement Class' do
+    expect(dup_movements.uniq.length).to eq(1)
   end
 end
