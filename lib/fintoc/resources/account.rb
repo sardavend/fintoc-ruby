@@ -32,7 +32,7 @@ module Fintoc
       @type = type
       @currency = currency
       @balance = Fintoc::Balance.new(**balance)
-      @movements = movements or []
+      @movements = movements || []
       @client = client
     end
 
@@ -41,13 +41,12 @@ module Fintoc
     end
 
     def movements(**params)
-      @movements = get_movements(**params).lazy.map { |movement| Fintoc::Movement.new(**movement) }
-      @movements
+      get_movements(**params).lazy.map { |movement| Fintoc::Movement.new(**movement) }
     end
 
     def update_movements(**params)
-      @movements += Array.new(movements(**params))
-      @movements = @movements.uniq(&:hash).sort_by(&:post_date)
+      @movements += movements(**params).to_a
+      @movements = @movements.uniq.sort_by(&:post_date)
     end
 
     def show_movements(rows = 5)
