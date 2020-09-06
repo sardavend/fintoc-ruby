@@ -10,8 +10,8 @@ module Fintoc
       "🏦 #{@name}"
     end
 
-    def inspect 
-      "<🏦 #{@name}>"
+    def inspect
+      "<Institution #{@name}>"
     end
   end
 end
