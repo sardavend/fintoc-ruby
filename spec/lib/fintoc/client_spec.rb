@@ -35,7 +35,7 @@ RSpec.describe Fintoc::Client do
     it "update account's movements" do
       movements = account.movements(since: '2020-08-15')
       account.update_balance
-      # expect(movements).to all(be_a(Fintoc::Movement))
+      expect(movements).to all(be_a(Fintoc::Movement))
     end
 
   end
