@@ -3,13 +3,10 @@ require 'fintoc/resources/account'
 RSpec.describe Fintoc::Account do
   let(:data) do
     {
-      "id": 'Z6AwnGn4idL7DPj4',
-      "name": 'Cuenta Corriente',
+      "id": 'Z6AwnGn4idL7DPj4', "name": 'Cuenta Corriente',
       "official_name": 'Cuenta Corriente Moneda Local',
-      "number": '9530516286',
-      "holder_id": '134910798',
-      "holder_name": 'Jon Snow',
-      "type": 'checking_account',
+      "number": '9530516286', "holder_id": '134910798',
+      "holder_name": 'Jon Snow', "type": 'checking_account',
       "currency": 'CLP',
       "balance": {
         "available": 7_010_510,
