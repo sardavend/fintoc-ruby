@@ -16,7 +16,7 @@ module Fintoc
       @user_agent = "fintoc-ruby/#{Fintoc::VERSION}"
       @headers = { "Authorization": @api_key, "User-Agent": @user_agent }
       @link_headers = nil
-      @pattern = '<(?<url>.*)>;\s*rel="(?<rel>.*)"'
+      @link_header_pattern = '<(?<url>.*)>;\s*rel="(?<rel>.*)"'
       @default_params = {}
       client
     end
@@ -56,7 +56,7 @@ module Fintoc
     end
 
     def links
-      get_links.each { |data| build_link(data) }
+      get_links.map { |data| build_link(data) }
     end
 
     def delete_link(link_id)
@@ -81,7 +81,7 @@ module Fintoc
     end
 
     def parse_headers(dict, link)
-      matches = link.strip.match(@pattern)
+      matches = link.strip.match(@link_header_pattern)
       dict[matches[:rel]] = matches[:url]
       dict
     end
