@@ -18,7 +18,6 @@ module Fintoc
       @link_headers = nil
       @link_header_pattern = '<(?<url>.*)>;\s*rel="(?<rel>.*)"'
       @default_params = {}
-      client
     end
 
     def get
