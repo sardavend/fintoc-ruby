@@ -28,7 +28,7 @@ module Fintoc
       @holder_type = holder_type
       @institution = Fintoc::Institution.new(**institution)
       @created_at = Date.iso8601(created_at)
-      @accounts = accounts.nil? ? [] : accounts.lazy.map{ |data| Fintoc::Account.new(**data, client: client) }
+      @accounts = accounts.nil? ? [] : accounts.lazy.map { |data| Fintoc::Account.new(**data, client: client) }
       @token = link_token
       @client = client
     end
@@ -36,7 +36,7 @@ module Fintoc
     def find_all(**kwargs)
       raise 'You must provide *exactly one* account field.' if kwargs.size != 1
 
-      field, value = kwargs.reduce { |k, v| { k: k, v: v } }
+      field, value = kwargs.to_a.first
       @accounts.select do |account|
         account.send(field.to_sym) == value
       end
