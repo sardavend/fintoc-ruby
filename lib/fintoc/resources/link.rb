@@ -68,8 +68,6 @@ module Fintoc
       end
     end
 
-    private
-
     def delete
       @client.delete_link(@id)
     end
