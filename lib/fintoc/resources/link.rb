@@ -44,7 +44,7 @@ module Fintoc
 
     def find(**kwargs)
       results = find_all(**kwargs)
-      results.any? ? results.first: nil
+      results.any? ? results.first : nil
     end
 
     def show_accounts(rows = 5)
