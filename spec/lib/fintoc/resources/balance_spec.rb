@@ -8,6 +8,6 @@ RSpec.describe Fintoc::Balance do
   end
 
   it 'returns their object_id when id_ getter is called' do
-    expect(balance.id_).to eq(balance.object_id)
+    expect(balance.id).to eq(balance.object_id)
   end
 end
