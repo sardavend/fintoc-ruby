@@ -33,7 +33,7 @@ RSpec.describe Fintoc::Movement do
   it 'create an instance of Movement' do
     expect(movement).to be_an_instance_of(Fintoc::Movement)
   end
-  context 'Movement #locale_date' do
+  describe '#locale_date' do
     it 'returns the post_date formatted as locale' do
       expect(movement.locale_date).to eq('04/17/20')
     end
