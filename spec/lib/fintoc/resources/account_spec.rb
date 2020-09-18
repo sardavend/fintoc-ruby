@@ -19,7 +19,7 @@ RSpec.describe Fintoc::Account do
       "client": client
     }
   end
-  let(:link) { client.link(link_token) }
+  let(:link) { client.get_link(link_token) }
   let(:account) { Fintoc::Account.new(**data) }
   describe '#new' do
     it 'create an instance of Account' do
