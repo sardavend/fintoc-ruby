@@ -1,5 +1,6 @@
 module Fintoc
   class Institution
+    attr_reader :id, :name, :country
     def initialize(id:, name:, country:, **)
       @id = id
       @name = name
