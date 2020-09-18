@@ -9,7 +9,7 @@ module Fintoc
       @institution = institution and Fintoc::Institution.new(**institution)
     end
 
-    def id_
+    def id
       object_id
     end
 
