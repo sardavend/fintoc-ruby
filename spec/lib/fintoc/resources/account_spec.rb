@@ -35,16 +35,16 @@ RSpec.describe Fintoc::Account do
     end
   end
   let(:linked_account) { link.find(type: 'checking_account') }
-  describe '#movements' do
+  describe '#get_movements' do
     it "get the last 30 account's movements", :vcr do
-      movements = linked_account.movements
+      movements = linked_account.get_movements
       expect(movements.size).to be <= 30
       expect(movements).to all(be_a(Fintoc::Movement))
     end
   end
   describe '#movement with since argument' do
     it "get account's movements with arguments", :vcr do
-      movements = linked_account.movements(since: '2020-08-15')
+      movements = linked_account.get_movements(since: '2020-08-15')
       linked_account.show_movements
       expect(movements).to all(be_a(Fintoc::Movement))
     end
