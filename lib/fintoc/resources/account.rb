@@ -45,7 +45,7 @@ module Fintoc
     end
 
     def update_movements(**params)
-      @movements += movements(**params).to_a
+      @movements += get_movements(**params).to_a
       @movements = @movements.uniq.sort_by(&:post_date)
     end
 
