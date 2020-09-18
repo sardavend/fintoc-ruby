@@ -61,10 +61,10 @@ link = client.link('link_token')
 account = link.find(type: 'checking_account')
 
 #Get the las 30 movements
-movements = account.movements
+movements = account.get_movements
 
 #Or get the all the movements since 
-movements = account.movements(since: '2020-08-15')
+movements = account.get_movements(since: '2020-08-15')
 
 ```
 And that’s it!
@@ -78,13 +78,13 @@ And that’s it!
 require 'fintoc'
 
 client = Fintoc::Client.new('api_key')
-link = client.link('link_token')
-accounts = link.accounts
+link = client.get_link('link_token')
+accounts = link.get_accounts
 puts accounts
 
 # Or... you can pretty print all the accounts in a Link
 
-link = client.link('link_token')
+link = client.get_link('link_token')
 link.show_accounts
 
 ```
@@ -95,7 +95,7 @@ If you want to find a specific account in a link, you can use **find**. You can 
 require 'fintoc'
 
 client = Fintoc::Client.new('api_key')
-link = client.link('link_token')
+link = client.get_link('link_token')
 account = link.find(type: 'checking_account')
 
 # or 
@@ -112,7 +112,7 @@ You can also search for multiple accounts matching a specific criteria with **fi
 require 'fintoc'
 
 client = Fintoc::Client.new('api_key')
-link = client.link('link_token')
+link = client.get_link('link_token')
 accounts = link.find_all(currency: 'CLP')
 ```
 
@@ -122,7 +122,7 @@ To update the account balance you can use **update_balance**:
 require 'fintoc'
 
 client = Fintoc::Client.new('api_key')
-link = client.link('link_token')
+link = client.get_link('link_token')
 account = link.find(number: '1111111')
 account.update_balance
 
@@ -134,18 +134,18 @@ require 'fintoc'
 require 'time'
 
 client = Fintoc::Client.new('api_key')
-link = client.link('link_token')
+link = client.get_link('link_token')
 account = link.find(type: 'checking_account')
 
 # You can get the account movements since a specific Date
 yesterday = DateTime.now - 1
-account.movements(since: yesterday)
+account.get_movements(since: yesterday)
 
 # Or... you can use an ISO 8601 formatted string representation of the Date
-account.movements(since: '2020-01-01')
+account.get_movements(since: '2020-01-01')
 ```
 
-Calling **movements** without arguments gets the last 30 movements of the account
+Calling **get_movements** without arguments gets the last 30 movements of the account
 
 ## Dependencies
 
