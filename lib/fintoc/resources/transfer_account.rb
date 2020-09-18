@@ -2,6 +2,7 @@ require 'fintoc/resources/institution'
 
 module Fintoc
   class TransferAccount
+    attr_reader :holder_id, :holder_name, :number, :institution
     def initialize(holder_id:, holder_name:, number:, institution:, **)
       @holder_id = holder_id
       @holder_name = holder_name
