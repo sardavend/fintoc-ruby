@@ -49,21 +49,21 @@ module Fintoc
       end
     end
 
-    def link(link_token)
-      data = { **get_link(link_token), "link_token": link_token }
+    def get_link(link_token)
+      data = { **_get_link(link_token), "link_token": link_token }
       build_link(data)
     end
 
-    def links
-      get_links.map { |data| build_link(data) }
+    def get_links
+      _get_links.map { |data| build_link(data) }
     end
 
     def delete_link(link_id)
       delete.call("links/#{link_id}")
     end
 
-    def account(link_token, account_id)
-      link(link_token).find(id: account_id)
+    def get_account(link_token, account_id)
+      get_link(link_token).find(id: account_id)
     end
 
     def to_s
@@ -85,11 +85,11 @@ module Fintoc
       dict
     end
 
-    def get_link(link_token)
+    def _get_link(link_token)
       get.call("links/#{link_token}")
     end
 
-    def get_links
+    def _get_links
       get.call('links')
     end
 
