@@ -8,7 +8,7 @@ module Fintoc
     include Utils
     attr_reader :type, :name, :holder_name, :currency
     attr_reader :id, :official_name, :number, :holder_id
-    attr_reader :balance
+    attr_reader :balance, :movements
     def initialize(
       id:,
       name:,
@@ -40,8 +40,8 @@ module Fintoc
       @balance = Fintoc::Balance.new(**get_account[:balance])
     end
 
-    def movements(**params)
-      get_movements(**params).lazy.map { |movement| Fintoc::Movement.new(**movement) }
+    def get_movements(**params)
+      _get_movements(**params).lazy.map { |movement| Fintoc::Movement.new(**movement) }
     end
 
     def update_movements(**params)
@@ -73,7 +73,7 @@ module Fintoc
       @client.get.call("accounts/#{@id}")
     end
 
-    def get_movements(**params)
+    def _get_movements(**params)
       first = @client.get.call("accounts/#{@id}/movements", **params)
       return first if params.empty?
 
