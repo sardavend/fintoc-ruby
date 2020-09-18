@@ -9,7 +9,7 @@ module Fintoc
       @limit = limit
     end
 
-    def id_
+    def id
       object_id
     end
 
