@@ -5,12 +5,10 @@ module Fintoc
   module Utils
     extend self
 
-    FIELDSUBS = [%w[id id_], %w[type type_]].freeze
-
     # Get a flat Array out of a list of lists of Iterables(Enumerators)
     #
     def flatten(sequences)
-      Enumerator::Chain.new(sequences).to_a
+      Enumerator::Chain.new(*sequences).to_a
     end
 
     # If the key exists, you will get that key-value pair.
@@ -36,17 +34,6 @@ module Fintoc
     def pluralize(amount, noun, suffix = 's')
       quantifier = amount or 'no'
       "#{quantifier} #{amount == 1 ? noun : noun + suffix}"
-    end
-
-    def rename_keys(dist, keys)
-      if dist.instance_of? Array
-        dist.each { |item| rename_keys(item, keys) }
-      elsif dist.instance_of? Hash
-        oldkey, newkey = keys
-        dist[newkey.to_sym] = dist.delete(oldkey.to_sym) if dist.key? oldkey.to_sym
-        dist.values.each { |value| rename_keys(value, keys) }
-      end
-      dist
     end
 
     # Transform a snake-cased name to its pascal-cased version.
